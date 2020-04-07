@@ -32,5 +32,6 @@ export default {
 #app .render {
   display: inline-block;
   width: 50%;
+  vertical-align: top;
 }
 </style>

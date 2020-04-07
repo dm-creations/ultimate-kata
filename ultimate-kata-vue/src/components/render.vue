@@ -1,5 +1,5 @@
 <template>
-  <div :class="[question, background]">
+  <div :class="[mainClass, background]">
     <h1 :class="h1Text">{{ title }}</h1>
     <p>
     </p>
@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      question: 'question',
+      mainClass: 'render',
       background: 'code-bg',
       h1Text: 'black-txt'
     }
