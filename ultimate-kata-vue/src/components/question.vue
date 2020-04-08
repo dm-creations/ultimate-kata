@@ -24,12 +24,14 @@
       <div class="sandbox">
         <p class="comment">// Your code here &darr;</p>
         <p class="cursor"></p>
+        <textarea />
       </div>
       <hr /><hr />
       <div class="greyed-out">
         <p>console.<span class="method">log</span>(<span class="string">'After = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
       </div>
     </div>
+    <div class="run">Submit Code</div>
   </div>
 </template>
 
@@ -64,15 +66,15 @@ li {
 a {
   color: #42b983;
 }
-p {
-  margin: 2px 0;
-}
 .code-bg {
+  position: relative;
   background-color: #212121; /* ideally {{code-bg}} */
   height: calc(100vh - 105px);
 }
 .prompt {
+  box-sizing: border-box;
   padding: 10px 0;
+  height: 120px;
   border-bottom: solid 1px white;
 }
 .white-txt {
@@ -109,7 +111,19 @@ p {
 .comment {
   color: #747474;
 }
+textarea {
+  width: 100%;
+  height: 400px;
+  overflow: scroll;
+  background-color: inherit;
+  outline: none;
+  border: none;
+  font-family: Menlo;
+  color: white;
+  font-size: inherit;
+}
 .cursor {
+  margin-bottom: -20px;
   background-color: white;
   width: 5px;
   height: 1em;
@@ -120,5 +134,23 @@ p {
 @keyframes blinky {
   from { background-color: inherit; }
   to { background-color: white; }
+}
+.run {
+  background-color: #4CAF50;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  margin: 0 auto;
+  margin-top: 15px;
+  width: 120px;
+  padding: 8px;
+  border-radius: 5px;
+  transition: all 0.2s ease-in 0s;
+  cursor: pointer
+}
+.run:hover {
+  color: white;
+  transition: all 0.2s ease-in 0s;
+  font-weight: 500;
 }
 </style>

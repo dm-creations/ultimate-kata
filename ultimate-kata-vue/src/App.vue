@@ -34,4 +34,7 @@ export default {
   width: 50%;
   vertical-align: top;
 }
+p {
+  margin: 2px 0;
+}
 </style>
