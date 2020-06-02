@@ -4,42 +4,79 @@
     <question title="Question"></question>
     <render title="Render"></render> -->
     <app-header></app-header>
-          <div id="editor" class="">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-      }</div>
-    <lesson001></lesson001>
+
+    <router-view v-on:created="setCode"/>
     <app-footer></app-footer>
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue';
-// import question from './components/question.vue';
-// import render from './components/render.vue';
+import routes from './router'
 import header from './components/header.vue';
-import lesson001 from './components/lesson001.vue';
 import footer from './components/footer.vue';
-// import ace from 'ace-builds/src/ace.js';
-// import 'ace-builds/src/mode-javascript.js';
 
 export default {
   name: 'App',
+  routes,
   components: {
     'app-header': header,
-    lesson001,
     'app-footer': footer
+  },
+  beforeCreate: function() {
+    // console.log(this.$ace)
+  },
+  mounted() {},
+  methods: {
+    setCode(lessonCode, language, theme) {
+      // Take the lesson from the child component into vm.data()
+      this.currentLesson = lessonCode;
+      this.modePath = language || this.modePath; // Javascript is the default if lesson component has no lesson language
+      this.themePath = theme || this.themePath; // what if lesson has theme but not language or vice versa? Always set false inside components?
+    },
+    goSay(foo) {
+      console.log(foo ? foo : 'keep trying')
+    },
+    childCode(event, value) {
+      console.log('From the child:', value)
+    },
+    getCode() {
+      return this.aceEditor.getValue();
+    }
   },
   data() {
     return {
-      component: 'lesson001'
+      lessonSession: '',
+      themePath: 'ace/theme/monokai',
+      currentLesson: ''
     }
   }
 }
 
-// var editor = ace.edit("editor");
+//   setup() {
+//     return { dode }
+//     }
+//  DOM Manipuations happen during and after mounted I think
+
+
+// beforeCreate
+// created --> called earlier in order to trigger actions like data fetching from API backend
+// beforeMount
+// mounted
+// beforeUpdate, 
+// updated 
+// beforeDestroy
+// destroyed
+
+
+
+// why do we want data return { aceEditor: null, } ? 
+
+      // this.aceEditor.setSelection({
+      //           start: {row: 0, column: 0},
+      //           end: {row: 0, column: 0}
+      //       });
 // editor.setTheme("ace/theme/cobalt");
-// editor.session.setMode("ace/mode/html");
+// editor.session.setMode("ace/mode/javascript");
 
 // editor.commands.addCommands([{
 //   name: "showSettingsMenu",
@@ -67,9 +104,7 @@ export default {
   vertical-align: top;
 }
 #app .lesson {
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
+  border: 0;
 }
 p {
   margin: 2px 0;

@@ -6,7 +6,8 @@
                 <h1>ltimate Code Kata</h1>
             </span>
         </div>
-        <button to="./lesson002.vue">To Lesson 2</button>
+      <router-link class="r-link" :to="{ name: 'lesson001' }">Lesson001</router-link>
+      <router-link class="r-link" :to="{ name: 'lesson002' }">Lesson002</router-link>
         <span class="header-items">
             <p>How it Works</p>
         </span>
@@ -46,5 +47,9 @@ export default {
       .header-items p {
         margin-top: 0;
         text-align: right;
+      }
+      .r-link {
+        margin-left: 10px;
+        margin-right: 20px;
       }
 </style>

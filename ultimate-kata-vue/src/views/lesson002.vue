@@ -23,6 +23,9 @@
       <hr /><hr />
     </div>
     <div class="code-sandbox">
+       <div id="editor" class="">
+         // Lesson 2
+       </div>
       <iframe class="box-iframe" src=""></iframe>
     </div>
     <hr /><hr />
@@ -35,9 +38,14 @@
 
 <script>
 export default {
-  name: 'lesson001',
+  name: 'lesson002',
   props: {
     title: String
+  },
+  methods: {
+    goBack() {
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+    }
   }
 }
 </script>
