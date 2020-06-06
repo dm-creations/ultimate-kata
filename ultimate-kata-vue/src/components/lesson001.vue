@@ -25,24 +25,27 @@
       </div>
       <div class="code-sandbox">
           <!-- <iframe class="box-iframe" src="https://codesandbox.io/s/lesson001-shvdr?codemirror=1&runonclick=1"></iframe> -->
-        <div id="editor" class="">let fruits = [];
-        fruits = ['Tomato', 'Avocado', 'Lemon']; // Avocado is a fruit - fight me↵
-
-        console.log('Before = [' + fruits + ']')</div>
+        <div id="editor" class="">Code Loading...</div>
       </div>
       <hr /><hr />
       <div class="greyed-out">
         <p>console.<span class="method">log</span>(<span class="string">'After = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
       </div>
+      <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
       <div v-on:click="submit" class="run">Submit Code</div>
     </div>
-    <iframe class="box-iframe" v-bind:srcdoc="lessonSession"></iframe>
+    <div class="results-container">
+      <iframe class="box-iframe" v-bind:srcdoc="lessonSession"></iframe>
+      <div id="console-log-div" class="console-log-div"></div>
+    </div>
   </div>
 </template>
 
 <script>
 
-
+// const consoleLogDiv = () => import ('console-log-div/console-log-div.js');
+// import ('console-log-div/console-log-div.js');
+import 'console.history'
 
 // var jog = 'I jog';
 export default {
@@ -56,13 +59,16 @@ export default {
     return {
       value: 'We jog',
       language: 'ace/mode/html',
-      lessonStartLine: 6,
+      lessonStartLine: 9,
       lessonCode: '<h1>Check The Console for the Answer</h1>' + `
 <script>
   let fruits = [];
   fruits = ['Tomato', 'Avocado', 'Lemon']; // Avocado is a fruit - fight me
   console.log('Before = ' + fruits);
-  // enter code here
+  //                 | |
+  //                 | |
+  // enter code here v v
+
   console.log('After = ' + fruits);
 ` + "</" + "script>",
       themePath: 'ace/theme/monokai',
@@ -77,6 +83,8 @@ export default {
   },
   mounted() {
     
+    // consoleLogDiv();
+
     // this.$emit('created', this.lessonCode, this.language);
 
     // console.log();
@@ -91,6 +99,9 @@ export default {
     this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine);
 
+    this.consoleDiv = document.querySelector('.console-log-div')
+
+
 // beforeCreate
 // created --> called earlier in order to trigger actions like data fetching from API backend
 // beforeMount
@@ -101,12 +112,52 @@ export default {
 // destroyed
   },
   methods: {
+    resetLesson() {
+      this.aceEditor.session.setValue(this.lessonCode);
+      this.aceEditor.gotoLine(this.lessonStartLine);
+      // console.history = {};
+      this.consoleDiv.innerHTML = ''
+    },
+    insideScriptTags(str, tagStart, tagEnd) {
+      return str.slice(tagStart, tagEnd);
+    },
     submit() {
       // take code inside ace editor
+      // import ('console-log-div/console-log-div.js').then( () => {})
+      // consoleLogDiv();
+
+      // clear console Div
+      this.consoleDiv.innerHTML = ''
+
+      // insert code into iframe div
       let iframe = document.querySelector('.box-iframe');
-      iframe.srcdoc = this.aceEditor.getValue();
+          iframe.srcdoc = this.aceEditor.getValue();
+
+      let lessonString = iframe.srcdoc;
+
+      let tagStartIndex = lessonString.indexOf('<script>') + 8;
+      let tagEndIndex = lessonString.indexOf('</scrip');
+
+      let lessonSession = this.insideScriptTags(lessonString, tagStartIndex, tagEndIndex);
+
+      // function looseJsonParse(obj){
+      //     return function() { return obj }();
+      // }
+      eval(lessonSession)
+      // console.log(looseJsonParse(lessonSession))
+      for (var i = 0; i < console.history.length; i++) {
+          this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
+      }
+      // lessonSession.slice(tagEnd, tagStart)
+      // if only one <script>
+      // console.log(lessonString.replace(/\s+/g, '').length);
+      // console.log(lessonString.replace(/\s+/g, '').length);
+      // console.log(JSON.stringify(lessonSession));
+      // consoleDiv.innerHTML = JSON.stringify(lessonSession);
 
       // insert it into iframe
+      // import 'console-log-div/console-log-div'
+      // () => import('console-log-div/console-log-div.js')
     }
   },
   updated() {
@@ -191,6 +242,7 @@ a {
   box-sizing: border-box;
   width: 100%;
   min-height: 600px;
+  height:80%;
 }
 .comment {
   color: #747474;
@@ -240,6 +292,32 @@ textarea {
   transition: all 0.2s ease-in 0s;
   font-weight: 500;
 }
+.run.reset {
+  background-color: #e63636
+}
+.results-container {
+  width: 50%;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.console-log-div {
+  box-sizing: border-box;
+  border: 1px solid gray;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 100%;
+  min-height: 200px;
+  max-height: 220px;
+  height: 20%;
+  overflow: scroll;
+}
+#console-log-text {
+  text-align: left;
+  max-width: 100% !important;
+}
 @media screen and (min-width: 667px) {
   .lesson {
     display: flex;
@@ -248,7 +326,7 @@ textarea {
     width: 50%;
   }
   .box-iframe {
-    width: 50%;
+    width: 100%;
   } 
 }
 </style>
