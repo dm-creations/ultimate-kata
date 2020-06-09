@@ -17,12 +17,6 @@ export default {
   components: {
     'app-header': header,
     'app-footer': footer
-  },
-  data() {
-    return {
-      lessonSession: '',
-      currentLesson: ''
-    }
   }
 }
 

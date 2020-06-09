@@ -50,35 +50,21 @@ import 'console.history'
 // var jog = 'I jog';
 export default {
   name: 'lesson001',
-  props: {
-    title: String,
-    userValue: Function,
-    lessonSession: [String, Function]
-  },
   data() {
     return {
       value: 'We jog',
       language: 'ace/mode/html',
       lessonStartLine: 9,
-      lessonCode: '<h1>Check The Console for the Answer</h1>' + `
-<script>
-  let fruits = [];
-  fruits = ['Tomato', 'Avocado', 'Lemon']; // Avocado is a fruit - fight me
-  console.log('Before = ' + fruits);
-  //                 | |
-  //                 | |
-  // enter code here v v
+      lessonCode: `<h1>Check The Console for the Answer</h1>\n<script>
+    let fruits = [];
+    fruits = ['Tomato', 'Avocado', 'Lemon']; // Avocado is a fruit - fight me
+    console.log('Before = ' + fruits);
+    //                 | |
+    //                 | |
+    // enter code here v v
 
-  console.log('After = ' + fruits);
-` + "</" + "script>",
-      themePath: 'ace/theme/monokai',
-      lessonCode1: `<template>
-      <head><style>h1{color:yellow;}</style></head>
-      <body>
-        <h1>Hi there buddy!</h1>
-        <script>console.log('whu!?')<script>
-      </body>
-    </template>`
+    console.log('After = ' + fruits);\n` + "</" + "script>",
+      themePath: 'ace/theme/monokai'
     }
   },
   mounted() {
@@ -97,7 +83,7 @@ export default {
         }
       );
     this.aceEditor.session.setValue(this.lessonCode);
-    this.aceEditor.gotoLine(this.lessonStartLine);
+    this.aceEditor.gotoLine(this.lessonStartLine, 4);
 
     this.consoleDiv = document.querySelector('.console-log-div')
 
@@ -115,7 +101,7 @@ export default {
     resetLesson() {
       this.aceEditor.session.setValue(this.lessonCode);
       this.aceEditor.gotoLine(this.lessonStartLine);
-      // console.history = {};
+      console.history = [];
       this.consoleDiv.innerHTML = ''
     },
     insideScriptTags(str, tagStart, tagEnd) {
@@ -128,12 +114,49 @@ export default {
 
       // clear console Div
       this.consoleDiv.innerHTML = ''
+      console.history = [];
 
       // insert code into iframe div
       let iframe = document.querySelector('.box-iframe');
           iframe.srcdoc = this.aceEditor.getValue();
 
-      let lessonString = iframe.srcdoc;
+
+//  ----------------------------------
+      // let getGeneratedPageURL = ({ html, css, js }) => {
+      //   let getBlobURL = (code, type) => {
+      //     let blob = new Blob([code], { type })
+      //     return URL.createObjectURL(blob)
+      //   }
+//        const cssURL = getBlobURL(css, 'text/css')
+//   const jsURL = getBlobURL(js, 'text/javascript')
+
+//   const source = `
+//     <html>
+//       <head>
+//         ${css && `<link rel="stylesheet" type="text/css" href="${cssURL}" />`}
+//         ${js && `<script src="${jsURL}"></scccccccccccCCCCCcccript>`}
+//       </head>
+//       <body>
+//         ${html || ''}
+//       </body>
+//     </html>
+//   `
+
+//   return getBlobURL(source, 'text/html')
+// }
+
+// const url = getGeneratedPageURL({
+//   html: '<p>Hello, world!</p>',
+//   css: 'p { color: blue; }',
+//   js: 'console.log("hi")'
+// })
+
+// const iframe = document.querySelector('#iframe')
+// iframe.src = url
+//  ----------------------------------
+//  ----------------------------------
+
+      let lessonString = this.aceEditor.getValue();
 
       let tagStartIndex = lessonString.indexOf('<script>') + 8;
       let tagEndIndex = lessonString.indexOf('</scrip');
@@ -148,6 +171,7 @@ export default {
       for (var i = 0; i < console.history.length; i++) {
           this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
       }
+      this.consoleDiv.innerHTML += "<hr/>";
       // lessonSession.slice(tagEnd, tagStart)
       // if only one <script>
       // console.log(lessonString.replace(/\s+/g, '').length);
