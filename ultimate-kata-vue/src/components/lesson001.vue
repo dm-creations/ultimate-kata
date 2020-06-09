@@ -35,6 +35,7 @@
       <div v-on:click="submit" class="run">Submit Code</div>
     </div>
     <div class="results-container">
+        <div v-if="congratsMessage"> {{ this.congratsMessage }} </div>
       <iframe class="box-iframe" v-bind:srcdoc="lessonSession"></iframe>
       <div id="console-log-div" class="console-log-div"></div>
     </div>
@@ -55,6 +56,7 @@ export default {
       value: 'We jog',
       language: 'ace/mode/html',
       lessonStartLine: 9,
+      congratsMessage: null,
       lessonCode: `<h1>Check The Console for the Answer</h1>\n<script>
     let fruits = [];
     fruits = ['Tomato', 'Avocado', 'Lemon']; // Avocado is a fruit - fight me
@@ -166,7 +168,20 @@ export default {
       // function looseJsonParse(obj){
       //     return function() { return obj }();
       // }
-      eval(lessonSession)
+        const func = new Function(lessonSession);
+        let x = func();
+
+        if (x[3] == 'Orange') {
+            this.congratsMessage = 'Congrats';
+        } else {
+            this.congratsMessage = 'Fail';
+        }
+
+        /*eslint-disable */
+
+
+        /*eslint-enable */
+
       // console.log(looseJsonParse(lessonSession))
       for (var i = 0; i < console.history.length; i++) {
           this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
