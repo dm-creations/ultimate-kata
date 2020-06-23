@@ -2,6 +2,7 @@
   <div id="app">
     <app-header></app-header>
     <router-view/>
+    <why-us></why-us>
     <app-footer></app-footer>
   </div>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import routes from './router'
 import header from './components/header.vue';
+import whyUs from './components/WhyUs.vue'
 import footer from './components/footer.vue';
 
 export default {
@@ -16,6 +18,7 @@ export default {
   routes,
   components: {
     'app-header': header,
+    'why-us': whyUs,
     'app-footer': footer
   }
 }

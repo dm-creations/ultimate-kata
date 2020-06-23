@@ -32,30 +32,38 @@
         <p>console.<span class="method">log</span>(<span class="string">'After = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
       </div>
       <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
+      <div v-on:click="blobber" class="run test">Run Code</div>
       <div v-on:click="submit" class="run">Submit Code</div>
     </div>
     <div class="results-container">
         <div v-if="congratsMessage"> {{ this.congratsMessage }} </div>
-      <iframe class="box-iframe" v-bind:srcdoc="lessonSession"></iframe>
+      <iframe class="box-iframe"></iframe>
       <div id="console-log-div" class="console-log-div"></div>
+    </div>
+    <div class="modal">
+      <div class="message-box">
+        <h2 class="message-title">Nice one!</h2>
+        <span v-on:click="nexx" class="next run">Next Lesson in:
+          <span id="countdown" class="countdown">{{ nextLessontimer / 1000 }}</span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
-// const consoleLogDiv = () => import ('console-log-div/console-log-div.js');
-// import ('console-log-div/console-log-div.js');
 import 'console.history'
 
-// var jog = 'I jog';
 export default {
   name: 'lesson001',
   data() {
     return {
+      title: 'Lesson 1',
       value: 'We jog',
       language: 'ace/mode/html',
       lessonStartLine: 9,
+      lessonSession: '',
       congratsMessage: null,
       lessonCode: `<h1>Check The Console for the Answer</h1>\n<script>
     let fruits = [];
@@ -66,8 +74,17 @@ export default {
     // enter code here v v
 
     console.log('After = ' + fruits);\n` + "</" + "script>",
-      themePath: 'ace/theme/monokai'
+      themePath: 'ace/theme/monokai',
+      user: {
+        id: 'Free User variable',
+        lessonComplete: false,
+        srsInfo: null
+      },
+      nextLessontimer: 3000
     }
+  },
+  beforeMount() {
+    
   },
   mounted() {
     
@@ -84,10 +101,11 @@ export default {
         tabSize: 4
         }
       );
-    this.aceEditor.session.setValue(this.lessonCode);
+    localStorage.getItem('lesson1State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson1State'))) : this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine, 4);
 
-    this.consoleDiv = document.querySelector('.console-log-div')
+    this.consoleDiv = document.querySelector('.console-log-div');
+    this.modal = document.querySelector('.modal');
 
 
 // beforeCreate
@@ -109,6 +127,28 @@ export default {
     insideScriptTags(str, tagStart, tagEnd) {
       return str.slice(tagStart, tagEnd);
     },
+    blobber() {
+      let lessonString = this.aceEditor.getValue();
+      let blobberhtml = new Blob([lessonString], { type: 'text/html' });
+      let iframe = document.querySelector('.box-iframe');
+      iframe.src = URL.createObjectURL(blobberhtml);
+      // URL.revokeObjectURL(objectURL) when no longer needed
+      this.consoleDiv.innerHTML = ''
+      for (var i = 0; i < console.history.length; i++) {
+          this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
+      }
+      this.consoleDiv.innerHTML += "<hr/>";
+    },
+    nexx() {
+        this.$router.push('/lesson-2');
+    },
+    NextLesson() {
+      console.log('go to next Lesson');
+    },
+    saveLesson() {
+      let lessonString = this.aceEditor.getValue();
+      localStorage.setItem('lesson1State', lessonString)
+    },
     submit() {
       // take code inside ace editor
       // import ('console-log-div/console-log-div.js').then( () => {})
@@ -118,61 +158,35 @@ export default {
       this.consoleDiv.innerHTML = ''
       console.history = [];
 
-      // insert code into iframe div
-      let iframe = document.querySelector('.box-iframe');
-          iframe.srcdoc = this.aceEditor.getValue();
 
+      
 
-//  ----------------------------------
-      // let getGeneratedPageURL = ({ html, css, js }) => {
-      //   let getBlobURL = (code, type) => {
-      //     let blob = new Blob([code], { type })
-      //     return URL.createObjectURL(blob)
-      //   }
-//        const cssURL = getBlobURL(css, 'text/css')
-//   const jsURL = getBlobURL(js, 'text/javascript')
-
-//   const source = `
-//     <html>
-//       <head>
-//         ${css && `<link rel="stylesheet" type="text/css" href="${cssURL}" />`}
-//         ${js && `<script src="${jsURL}"></scccccccccccCCCCCcccript>`}
-//       </head>
-//       <body>
-//         ${html || ''}
-//       </body>
-//     </html>
-//   `
-
-//   return getBlobURL(source, 'text/html')
-// }
-
-// const url = getGeneratedPageURL({
-//   html: '<p>Hello, world!</p>',
-//   css: 'p { color: blue; }',
-//   js: 'console.log("hi")'
-// })
-
-// const iframe = document.querySelector('#iframe')
-// iframe.src = url
-//  ----------------------------------
-//  ----------------------------------
 
       let lessonString = this.aceEditor.getValue();
 
       let tagStartIndex = lessonString.indexOf('<script>') + 8;
       let tagEndIndex = lessonString.indexOf('</scrip');
 
+      // insert code into iframe div
+      let iframe = document.querySelector('.box-iframe');
+      // iframe.srcdoc = this.aceEditor.getValue();
+      let blobber1 = new Blob([lessonString], { type: 'text/html' });
+      iframe.src = URL.createObjectURL(blobber1);
+
       let lessonSession = this.insideScriptTags(lessonString, tagStartIndex, tagEndIndex);
 
       // function looseJsonParse(obj){
       //     return function() { return obj }();
       // }
-        const func = new Function(lessonSession);
+        const func = new Function(lessonSession + 'return fruits');
         let x = func();
 
         if (x[3] == 'Orange') {
             this.congratsMessage = 'Congrats';
+            this.user.lessonComplete = true;
+            this.modal.style.display = 'block';
+            this.saveLesson();
+
         } else {
             this.congratsMessage = 'Fail';
         }
@@ -182,11 +196,11 @@ export default {
 
         /*eslint-enable */
 
-      // console.log(looseJsonParse(lessonSession))
       for (var i = 0; i < console.history.length; i++) {
           this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
       }
       this.consoleDiv.innerHTML += "<hr/>";
+
       // lessonSession.slice(tagEnd, tagStart)
       // if only one <script>
       // console.log(lessonString.replace(/\s+/g, '').length);
@@ -194,13 +208,15 @@ export default {
       // console.log(JSON.stringify(lessonSession));
       // consoleDiv.innerHTML = JSON.stringify(lessonSession);
 
-      // insert it into iframe
-      // import 'console-log-div/console-log-div'
-      // () => import('console-log-div/console-log-div.js')
+
+//  ----------------------------------
+//  ----------------------------------
     }
   },
-  updated() {
-
+  watch: {
+    congratsMessage: function(val, oldVal) {
+      console.log('%c' + oldVal + ' ==> ' + val, 'color: yellow')
+    }
   }
 }
 </script>
@@ -331,8 +347,11 @@ textarea {
   transition: all 0.2s ease-in 0s;
   font-weight: 500;
 }
+.run.test {
+  background-color: aqua;
+}
 .run.reset {
-  background-color: #e63636
+  background-color: #e63636;
 }
 .results-container {
   width: 50%;
@@ -356,6 +375,35 @@ textarea {
 #console-log-text {
   text-align: left;
   max-width: 100% !important;
+}
+.modal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #0000005F;
+  height: 100vh;
+  width: 100%;
+}
+.message-box {
+  position: absolute;
+  background-color: white;
+  padding: 50px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.message-box > h2 {
+  margin-bottom: 50px;
+}
+.next {
+  padding: 17px;
+}
+.message-box .countdown {
+  font-size: 2em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  vertical-align: middle;
 }
 @media screen and (min-width: 667px) {
   .lesson {
