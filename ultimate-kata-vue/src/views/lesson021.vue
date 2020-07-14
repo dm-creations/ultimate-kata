@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Remove the <span class="string">'FIRST ITEM'</span> of the Array
+          Create a <span class="tag-name">&lt;nav&gt;</span> element with an id of <span class="string">"header"</span>
         </h2>
       </div>
       <div class="visual-tip">
@@ -12,12 +12,13 @@
       <div class="attempt">
         <div class="greyed-out">
           <!-- to be imported qBoilerplate -->
-          <p><span class="func">let</span> <span class="vari">catBreeds </span>= [];</p>
-          <p>
-            <span class="vari">catBreeds </span>= [<span class="string">'Bengal'</span>, <span class="string">'Persian'</span>, <span class="string">'Russian Blue'</span>];
-          </p>
+          <p><span class="doctype">&lt;!DOCTYPE html&gt;</span></p>
+          <p><span class="tag-name">&lt;html <span class="attribute">lang</span>="<span class="string">en</span>"></span></p>
+          <p><span class="tag-name">&lt;head></span></p>
+          <p><span class="tag-name">&lt;title></span>A quick website<span class="tag-name">&lt;/title></span></p>
+          <p><span class="tag-name">&lt;/head></span></p>
+          <p><span class="tag-name">&lt;body></span></p>
           <br />
-          <p>console.<span class="method">log</span>(<span class="string">'Before = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> )</p>
         </div>
         <!-- end of import qBoilerplate -->
         <hr /><hr />
@@ -27,7 +28,8 @@
       </div>
       <hr /><hr />
       <div class="greyed-out">
-        <p>console.<span class="method">log</span>(<span class="string">'After = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> );</p>
+        <p><span class="tag-name">&lt;/body></span></p>
+        <p><span class="tag-name">&lt;/html></span></p>
       </div>
       <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
       <div v-on:click="blobber" class="run test">Run Code</div>
@@ -35,7 +37,7 @@
     </div>
     <div class="results-container">
         <div v-if="congratsMessage"> {{ this.congratsMessage }} </div>
-      <iframe class="box-iframe"></iframe>
+      <iframe id="ifrm" class="box-iframe"></iframe>
       <div id="console-log-div" class="console-log-div"></div>
     </div>
     <div class="modal">
@@ -54,18 +56,22 @@
 import 'console.history'
 
 export default {
-  name: 'lesson003',
+  name: 'lesson021',
   data() {
     return {
-      title: 'Lesson 3',
+      title: 'Lesson 21 - Build a website',
       value: 'We jog',
-      language: 'ace/mode/javascript',
-      lessonStartLine: 4,
+      language: 'ace/mode/html',
+      lessonStartLine: 9,
       lessonSession: '',
+      iframeLoaded: false,
       congratsMessage: null,
-      preLessonCode: `let catBreeds = [];\ncatBreeds = ['Bengal', 'Persian', 'Russian Blue'];\nconsole.log('Before = ' + catBreeds )\n`,
-      lessonCode: `//                 | |\n//                 | |\n// enter code here v v\n`,
-      postLessonCode: "\nconsole.log('After = ' + catBreeds );",
+      preLessonCode: `<!DOCTYPE html>\n<html lang="en">\n<head>\n<title>A quick website</title>\n</head>\n<body>`,
+      lessonCode: `<!--                 | |  -->
+<!--                 | |  -->
+<!-- enter code here v v  -->
+`,
+      postLessonCode: "\n</body>\n</html>",
       themePath: 'ace/theme/monokai',
       user: {
         id: 'Free User variable',
@@ -75,7 +81,16 @@ export default {
       nextLessontimer: 3000
     }
   },
+  beforeMount() {
+    
+  },
   mounted() {
+    
+    // consoleLogDiv();
+
+    // this.$emit('created', this.lessonCode, this.language);
+
+    // console.log();
     this.aceEditor = this.$ace.edit('editor', {
         maxLines: 60,
         fontSize: 16,
@@ -84,48 +99,35 @@ export default {
         tabSize: 4
         }
       );
-    localStorage.getItem('lesson3State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson3State'))) : this.aceEditor.session.setValue(this.lessonCode);
-    this.aceEditor.gotoLine(this.lessonStartLine, 1);
+    localStorage.getItem('lesson21State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson21State'))) : this.aceEditor.session.setValue(this.lessonCode);
+    this.aceEditor.gotoLine(this.lessonStartLine, 4);
 
     this.consoleDiv = document.querySelector('.console-log-div');
     this.modal = document.querySelector('.modal');
 
+
+// beforeCreate
+// created --> called earlier in order to trigger actions like data fetching from API backend
+// beforeMount
+// mounted
+// beforeUpdate, 
+// updated 
+// beforeDestroy
+// destroyed
+  },
+  computed: {
+
   },
   methods: {
-    blobber() {
-      this.consoleDiv.innerHTML = ''
-      console.history = [];
-
-      let lessonString = this.aceEditor.getValue();
-      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
-      
-      let blobberjs = new Blob([fullLessonString], { type: 'text/javascript' });
-      let blobberjsLink = URL.createObjectURL(blobberjs);
-      let blobberhtml = new Blob(['<script src="',blobberjsLink,'">','</scr','ipt>'], { type: 'text/html' });
-      let iframe = document.querySelector('.box-iframe');
-      iframe.src = URL.createObjectURL(blobberhtml);
-      // URL.revokeObjectURL(objectURL) when no longer needed like when going to next lesson
-
-      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode + 'return catBreeds;' );
-      let x = tryIt();
-
-      if (x[0] == 'Persian' && x.length == 2) {
-        this.congratsMessage = 'Should Work';
-      }
-
-      for (var i = 0; i < console.history.length; i++) {
-          this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
-      }
-      this.consoleDiv.innerHTML += "<hr/>";
-    },
-    insideScriptTags(str, tagStart, tagEnd) {
-      return str.slice(tagStart, tagEnd);
-    },
-    NextLesson() {
-      console.log('go to next Lesson');
-    },
-    nexx() {
-        this.$router.push('/lesson-4');
+    frameloaded() { 
+        let iframe = document.querySelector('.box-iframe');
+        let iframeDoc = iframe.contentDocument.getElementById('header');
+        
+        if (typeof(iframeDoc) != 'undefined' && iframeDoc != null){
+              this.congratsMessage = 'Good so far...'
+          } else {
+              this.congratsMessage = 'mehh';
+          }
     },
     resetLesson() {
       this.aceEditor.session.setValue(this.lessonCode);
@@ -133,49 +135,105 @@ export default {
       console.history = [];
       this.consoleDiv.innerHTML = ''
     },
-    saveLesson() {
-      // todo: add "saving lesson" quick animation
+    insideScriptTags(str, tagStart, tagEnd) {
+      return str.slice(tagStart, tagEnd);
+    },
+    submitter() {
       let lessonString = this.aceEditor.getValue();
-      localStorage.setItem('lesson3State', lessonString)
+      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
+      let blobberhtml = new Blob([fullLessonString], { type: 'text/html' });
+      let iframe = document.querySelector('.box-iframe');
+      iframe.src = URL.createObjectURL(blobberhtml);
+
+    },
+    blobber() {
+      let lessonString = this.aceEditor.getValue();
+      this.consoleDiv.innerHTML = ''
+      console.history = [];
+
+      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
+      
+      let blobberhtml = new Blob([fullLessonString], { type: 'text/html' });
+      let iframe = document.querySelector('.box-iframe');
+      iframe.src = URL.createObjectURL(blobberhtml);
+
+      // URL.revokeObjectURL(objectURL) when no longer needed
+
+      this.consoleDiv.innerHTML += "<hr/>";
+
+      iframe.addEventListener('load', this.frameloaded );
+    //   let doc = iframe.contentDocument;
+    //   let docco = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+
+    //   let doccoNavvo = iframe.contentDocument.location;
+
+      for (var i = 0; i < console.history.length; i++) {
+          this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
+      }
+    // iframe.removeEventListener('load', this.frameloaded );
+    },
+    nexx() {
+        this.$router.push('/lesson-2');
+    },
+    NextLesson() {
+      console.log('go to next Lesson');
+    },
+    saveLesson() {
+      let lessonString = this.aceEditor.getValue();
+      localStorage.setItem('lesson1State', lessonString)
     },
     submit() {
-
       // clear console Div
       this.consoleDiv.innerHTML = ''
       console.history = [];
 
       let lessonString = this.aceEditor.getValue();
-      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
+
 
       // insert code into iframe div
       let iframe = document.querySelector('.box-iframe');
-      let blobber1 = new Blob([fullLessonString], { type: 'text/javascript' });
-
+      let blobber1 = new Blob([lessonString], { type: 'text/html' });
       iframe.src = URL.createObjectURL(blobber1);
 
 
-      const func = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return catBreeds;' );
-      let x = func();
+      iframe.addEventListener('load', this.frameloaded );
 
-      if (x[0] == 'Persian' && x.length == 2) {
-            this.congratsMessage = 'Congrats';
-            this.user.lessonComplete = true;
-            this.modal.style.display = 'block';
-            this.saveLesson();
+    //   put safety net checks here vv for if they create any script tags and put code inside
+    
+    //   let tagStartIndex = lessonString.indexOf('<script>') + 8;
+    //   let tagEndIndex = lessonString.indexOf('</scrip');
+    //   let lessonCode = this.insideScriptTags(lessonString, tagStartIndex, tagEndIndex);
+    //   const func = new Function(lessonCode);
+    //   let x = func();
 
-        } else {
-            this.congratsMessage = 'Fail';
-        }
+    //   if (x[3] == 'Orange') {
+    //       this.congratsMessage = 'Congrats';
+    //       this.user.lessonComplete = true;
+    //       this.modal.style.display = 'block';
+    //       this.saveLesson();
+
+    //   } else {
+    //       this.congratsMessage = 'Fail';
+    //   }
+
+        /*eslint-disable */
+
+        /*eslint-enable */
 
       for (var i = 0; i < console.history.length; i++) {
           this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
       }
       this.consoleDiv.innerHTML += "<hr/>";
 
-//  ----------------------------------
-//  ----------------------------------
+    // iframe.removeEventListener('load', this.frameloaded );
+
     }
   },
+  watch: {
+    congratsMessage: function(val, oldVal) {
+      console.log('%c' + oldVal + ' ==> ' + val, 'color: yellow')
+    }
+  }
 }
 </script>
 
@@ -230,6 +288,13 @@ a {
   margin-left: 48px;
   text-align: left;
   opacity: 0.6;
+
+}
+.tag-name {
+    color: #5db0d7;
+}
+.attribute {
+    color: #9bbbdc;
 }
 .func {
   color: #9a7fd5;

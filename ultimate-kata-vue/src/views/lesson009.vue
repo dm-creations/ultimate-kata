@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Remove the <span class="string">'FIRST ITEM'</span> of the Array
+          <span class="string">'SLICE'</span> out the array items from the <span class="string">'THIRD'</span> to the <span class="string">'FIFTH'</span> entries from <span class="vari">myArray</span> into <span class="vari">newArray</span>
         </h2>
       </div>
       <div class="visual-tip">
@@ -12,12 +12,13 @@
       <div class="attempt">
         <div class="greyed-out">
           <!-- to be imported qBoilerplate -->
-          <p><span class="func">let</span> <span class="vari">catBreeds </span>= [];</p>
+          <p><span class="func">let</span> <span class="vari">myArray </span>= [];</p>
+          <p><span class="func">let</span> <span class="vari">newArray </span>= [];</p>
           <p>
-            <span class="vari">catBreeds </span>= [<span class="string">'Bengal'</span>, <span class="string">'Persian'</span>, <span class="string">'Russian Blue'</span>];
+            <span class="vari">myArray </span>= [<span class="string">'1.Bread'</span>, <span class="string">'2.Cheesecake'</span>, <span class="string">'3.Cucumber'</span>, <span class="string">'4.Pie'</span>, <span class="string">'5.Pizza'</span>, <span class="string">'6.Watermelon'</span>];
           </p>
           <br />
-          <p>console.<span class="method">log</span>(<span class="string">'Before = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> )</p>
+          <p>console.<span class="method">log</span>(<span class="string">'Before: myArray = '</span> <span class="operator">+ </span><span class="vari">myArray</span> )</p>
         </div>
         <!-- end of import qBoilerplate -->
         <hr /><hr />
@@ -27,7 +28,8 @@
       </div>
       <hr /><hr />
       <div class="greyed-out">
-        <p>console.<span class="method">log</span>(<span class="string">'After = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> );</p>
+        <p>console.<span class="method">log</span>(<span class="string">'After: myArray = '</span> <span class="operator">+ </span><span class="vari">myArray</span> );</p>
+        <p>console.<span class="method">log</span>(<span class="string">'newArray = '</span> <span class="operator">+ </span><span class="vari">newArray</span> );</p>
       </div>
       <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
       <div v-on:click="blobber" class="run test">Run Code</div>
@@ -54,18 +56,18 @@
 import 'console.history'
 
 export default {
-  name: 'lesson003',
+  name: 'lesson009',
   data() {
     return {
-      title: 'Lesson 3',
+      title: 'Lesson 9',
       value: 'We jog',
       language: 'ace/mode/javascript',
       lessonStartLine: 4,
       lessonSession: '',
       congratsMessage: null,
-      preLessonCode: `let catBreeds = [];\ncatBreeds = ['Bengal', 'Persian', 'Russian Blue'];\nconsole.log('Before = ' + catBreeds )\n`,
+      preLessonCode: `let myArray = [];\nmyArray = ['1.Bread ', '2.Cheesecake ', '3.Cucumber ', '4.Pie ', '5.Pizza ', '6.Watermelon'];\nconsole.log('Before = ' + myArray )\n`,
       lessonCode: `//                 | |\n//                 | |\n// enter code here v v\n`,
-      postLessonCode: "\nconsole.log('After = ' + catBreeds );",
+      postLessonCode: "\nconsole.log('After = ' + myArray );\nconsole.log('After = ' + newArray );",
       themePath: 'ace/theme/monokai',
       user: {
         id: 'Free User variable',
@@ -84,7 +86,7 @@ export default {
         tabSize: 4
         }
       );
-    localStorage.getItem('lesson3State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson3State'))) : this.aceEditor.session.setValue(this.lessonCode);
+    localStorage.getItem('lesson9State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson9State'))) : this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine, 1);
 
     this.consoleDiv = document.querySelector('.console-log-div');
@@ -106,10 +108,10 @@ export default {
       iframe.src = URL.createObjectURL(blobberhtml);
       // URL.revokeObjectURL(objectURL) when no longer needed like when going to next lesson
 
-      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode + 'return catBreeds;' );
+      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode + 'return newArray;' );
       let x = tryIt();
 
-      if (x[0] == 'Persian' && x.length == 2) {
+      if (x[0] == '3.Cucumber ' && x.length == 3) {
         this.congratsMessage = 'Should Work';
       }
 
@@ -125,7 +127,7 @@ export default {
       console.log('go to next Lesson');
     },
     nexx() {
-        this.$router.push('/lesson-4');
+        this.$router.push('/lesson-10');
     },
     resetLesson() {
       this.aceEditor.session.setValue(this.lessonCode);
@@ -136,7 +138,7 @@ export default {
     saveLesson() {
       // todo: add "saving lesson" quick animation
       let lessonString = this.aceEditor.getValue();
-      localStorage.setItem('lesson3State', lessonString)
+      localStorage.setItem('lesson9State', lessonString)
     },
     submit() {
 
@@ -154,10 +156,10 @@ export default {
       iframe.src = URL.createObjectURL(blobber1);
 
 
-      const func = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return catBreeds;' );
+      const func = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return newArray;' );
       let x = func();
 
-      if (x[0] == 'Persian' && x.length == 2) {
+      if (x[0] == '3.Cucumber ' && x.length == 3) {
             this.congratsMessage = 'Congrats';
             this.user.lessonComplete = true;
             this.modal.style.display = 'block';
@@ -217,7 +219,7 @@ a {
 .prompt {
   box-sizing: border-box;
   padding: 10px 0;
-  height: 120px;
+  height: auto;
   border-bottom: solid 1px white;
 }
 .white-txt {

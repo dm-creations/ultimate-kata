@@ -64,14 +64,8 @@ export default {
       lessonStartLine: 9,
       lessonSession: '',
       congratsMessage: null,
-      preLessonCode: `let dogBreeds = [];
-dogBreeds = ['Poodle', 'Chihuahua', 'Greyhound'];\n
-console.log('Before = ' + dogBreeds )\n`,
-      lessonCode: `//                 | |
-//                 | |
-// enter code here v v
-
-`,
+      preLessonCode: `let dogBreeds = [];\ndogBreeds = ['Poodle', 'Chihuahua', 'Greyhound'];\nconsole.log('Before = ' + dogBreeds )\n`,
+      lessonCode: `//                 | |\n//                 | |\n// enter code here v v\n`,
       postLessonCode: "\nconsole.log('After = ' + dogBreeds );",
       themePath: 'ace/theme/monokai',
       user: {
@@ -104,12 +98,22 @@ console.log('Before = ' + dogBreeds )\n`,
       console.history = [];
 
       let lessonString = this.aceEditor.getValue();
-      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
+      // let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
       
-      let blobberjs = new Blob(['<script>',fullLessonString,'</scr','ipt>'], { type: 'text/html' });
-      let iframe = document.querySelector('.box-iframe');
-      iframe.src = URL.createObjectURL(blobberjs);
-      // URL.revokeObjectURL(objectURL) when no longer needed
+      // let blobberjs = new Blob([fullLessonString], { type: 'text/javascript' });
+      // let blobberjsLink = URL.createObjectURL(blobberjs);
+      // let blobberhtml = new Blob(['<script src="',blobberjsLink,'">','</scr','ipt>'], { type: 'text/html' });
+      // let iframe = document.querySelector('.box-iframe');
+      // iframe.src = URL.createObjectURL(blobberhtml);
+      // URL.revokeObjectURL(objectURL) when no longer needed like when going to next lesson
+
+      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return dogBreeds;' );
+      let x = tryIt();
+
+      if (x[0] == 'Bulldog') {
+        this.congratsMessage = 'Should Work';
+      }
+
       for (var i = 0; i < console.history.length; i++) {
           this.consoleDiv.innerHTML += console.history[i].arguments[0] + "<br/>";
       }
@@ -146,7 +150,8 @@ console.log('Before = ' + dogBreeds )\n`,
 
       // insert code into iframe div
       let iframe = document.querySelector('.box-iframe');
-      let blobber1 = new Blob([fullLessonString], { type: 'text/javascript' });
+      let blobber1 = new Blob(['<script>',fullLessonString,'</sc','ript>'], { type: 'text/javascript' });
+
       iframe.src = URL.createObjectURL(blobber1);
 
 

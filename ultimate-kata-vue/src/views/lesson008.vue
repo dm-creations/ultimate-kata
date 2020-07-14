@@ -4,7 +4,10 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Remove the <span class="string">'FIRST ITEM'</span> of the Array
+           <span class="string">'Copy'</span> the sixth value <span class="string">'within' </span>the array <span class="vari">'myArray'</span> and <span class="string">'replace'</span> the 
+        </h2>
+        <h2 class="white-txt">
+            <span class="string">'SECOND' </span>value with that same value 
         </h2>
       </div>
       <div class="visual-tip">
@@ -12,12 +15,9 @@
       <div class="attempt">
         <div class="greyed-out">
           <!-- to be imported qBoilerplate -->
-          <p><span class="func">let</span> <span class="vari">catBreeds </span>= [];</p>
-          <p>
-            <span class="vari">catBreeds </span>= [<span class="string">'Bengal'</span>, <span class="string">'Persian'</span>, <span class="string">'Russian Blue'</span>];
-          </p>
+          <p><span class="func">let</span> <span class="vari">myArray </span>= [<span class="string">'First'</span>, <span class="string">'Second'</span>, <span class="string">'Third'</span>, <span class="string">'Fourth'</span>, <span class="string">'Fifth'</span>, <span class="string">'Sixth'</span>, <span class="string">'Seventh'</span>];</p>
           <br />
-          <p>console.<span class="method">log</span>(<span class="string">'Before = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> )</p>
+          <p>console.<span class="method">log</span>(<span class="string">'myArray = '</span> <span class="operator">+ </span><span class="vari">myArray</span> );</p>
         </div>
         <!-- end of import qBoilerplate -->
         <hr /><hr />
@@ -27,7 +27,7 @@
       </div>
       <hr /><hr />
       <div class="greyed-out">
-        <p>console.<span class="method">log</span>(<span class="string">'After = '</span> <span class="operator">+ </span><span class="vari">catBreeds</span> );</p>
+        <p>console.<span class="method">log</span>(<span class="string">'myArray = '</span> <span class="operator">+ </span><span class="vari">myArray</span> );</p>
       </div>
       <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
       <div v-on:click="blobber" class="run test">Run Code</div>
@@ -54,18 +54,18 @@
 import 'console.history'
 
 export default {
-  name: 'lesson003',
+  name: 'lesson008',
   data() {
     return {
-      title: 'Lesson 3',
+      title: 'Lesson 8',
       value: 'We jog',
       language: 'ace/mode/javascript',
       lessonStartLine: 4,
       lessonSession: '',
       congratsMessage: null,
-      preLessonCode: `let catBreeds = [];\ncatBreeds = ['Bengal', 'Persian', 'Russian Blue'];\nconsole.log('Before = ' + catBreeds )\n`,
+      preLessonCode: `let myArray = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh'];\nconsole.log('myArray = ' + myArray );\n// | |                   | |\n// v v your code is here v v\n\n`,
       lessonCode: `//                 | |\n//                 | |\n// enter code here v v\n`,
-      postLessonCode: "\nconsole.log('After = ' + catBreeds );",
+      postLessonCode: "\n\n// ^ ^ your code is here ^ ^\n// | |                   | |\n\nconsole.log('myArray = ' + myArray );\n",
       themePath: 'ace/theme/monokai',
       user: {
         id: 'Free User variable',
@@ -84,7 +84,7 @@ export default {
         tabSize: 4
         }
       );
-    localStorage.getItem('lesson3State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson3State'))) : this.aceEditor.session.setValue(this.lessonCode);
+    localStorage.getItem('lesson8State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson8State'))) : this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine, 1);
 
     this.consoleDiv = document.querySelector('.console-log-div');
@@ -106,10 +106,10 @@ export default {
       iframe.src = URL.createObjectURL(blobberhtml);
       // URL.revokeObjectURL(objectURL) when no longer needed like when going to next lesson
 
-      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode + 'return catBreeds;' );
+      const tryIt = new Function(this.preLessonCode + lessonString + this.postLessonCode + 'return myArray;' );
       let x = tryIt();
 
-      if (x[0] == 'Persian' && x.length == 2) {
+      if (x[1] == 'Sixth') {
         this.congratsMessage = 'Should Work';
       }
 
@@ -125,7 +125,7 @@ export default {
       console.log('go to next Lesson');
     },
     nexx() {
-        this.$router.push('/lesson-4');
+        this.$router.push('/lesson-9');
     },
     resetLesson() {
       this.aceEditor.session.setValue(this.lessonCode);
@@ -136,7 +136,7 @@ export default {
     saveLesson() {
       // todo: add "saving lesson" quick animation
       let lessonString = this.aceEditor.getValue();
-      localStorage.setItem('lesson3State', lessonString)
+      localStorage.setItem('lesson8State', lessonString)
     },
     submit() {
 
@@ -154,10 +154,10 @@ export default {
       iframe.src = URL.createObjectURL(blobber1);
 
 
-      const func = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return catBreeds;' );
+      const func = new Function(this.preLessonCode + lessonString + this.postLessonCode +'return myArray;' );
       let x = func();
 
-      if (x[0] == 'Persian' && x.length == 2) {
+      if (x[1] == 'Sixth') {
             this.congratsMessage = 'Congrats';
             this.user.lessonComplete = true;
             this.modal.style.display = 'block';
@@ -217,7 +217,7 @@ a {
 .prompt {
   box-sizing: border-box;
   padding: 10px 0;
-  height: 120px;
+  height: auto;
   border-bottom: solid 1px white;
 }
 .white-txt {
@@ -225,7 +225,7 @@ a {
 }
 .greyed-out {
   font-family: 'Menlo';
-  width: 80%;
+  width: 90%;
   color: white;
   margin-left: 48px;
   text-align: left;
@@ -246,10 +246,11 @@ a {
 .code-sandbox {
   width: 100%;
   margin-right: auto;
-  min-height: 400px;
+  min-height: 300px;
+  max-height: 300px;
   margin-left: auto;
   text-align: left;
-  overflow: hidden;
+  overflow: scroll;
 }
 .box-iframe {
   box-sizing: border-box;
