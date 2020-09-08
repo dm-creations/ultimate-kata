@@ -124,9 +124,22 @@ export default {
         let iframeDoc = iframe.contentDocument.getElementById('header');
         
         if (typeof(iframeDoc) != 'undefined' && iframeDoc != null){
-              this.congratsMessage = 'Good so far...'
+                this.congratsMessage = 'Good so far...';
           } else {
               this.congratsMessage = 'mehh';
+          }
+    },
+    frameSubmit() { 
+        let iframe = document.querySelector('.box-iframe');
+        let iframeDoc = iframe.contentDocument.getElementById('header');
+        
+        if (typeof(iframeDoc) != 'undefined' && iframeDoc != null){
+                this.congratsMessage = 'Well done!';
+                this.user.lessonComplete = true;
+                this.modal.style.display = 'block';
+                this.saveLesson()
+          } else {
+              this.congratsMessage = 'not quite: lesson hint goes here';
           }
     },
     resetLesson() {
@@ -144,7 +157,6 @@ export default {
       let blobberhtml = new Blob([fullLessonString], { type: 'text/html' });
       let iframe = document.querySelector('.box-iframe');
       iframe.src = URL.createObjectURL(blobberhtml);
-
     },
     blobber() {
       let lessonString = this.aceEditor.getValue();
@@ -162,6 +174,7 @@ export default {
       this.consoleDiv.innerHTML += "<hr/>";
 
       iframe.addEventListener('load', this.frameloaded );
+
     //   let doc = iframe.contentDocument;
     //   let docco = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
 
@@ -173,14 +186,14 @@ export default {
     // iframe.removeEventListener('load', this.frameloaded );
     },
     nexx() {
-        this.$router.push('/lesson-2');
+        this.$router.push('/lesson-22');
     },
     NextLesson() {
       console.log('go to next Lesson');
     },
     saveLesson() {
       let lessonString = this.aceEditor.getValue();
-      localStorage.setItem('lesson1State', lessonString)
+      localStorage.setItem('lesson21State', lessonString)
     },
     submit() {
       // clear console Div
@@ -196,7 +209,8 @@ export default {
       iframe.src = URL.createObjectURL(blobber1);
 
 
-      iframe.addEventListener('load', this.frameloaded );
+    //   probably should replace this with more Vue friendly code
+      iframe.addEventListener('load', this.frameSubmit );
 
     //   put safety net checks here vv for if they create any script tags and put code inside
     

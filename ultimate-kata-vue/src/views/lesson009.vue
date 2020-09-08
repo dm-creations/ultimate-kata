@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          <span class="string">'SLICE'</span> out the array items from the <span class="string">'THIRD'</span> to the <span class="string">'FIFTH'</span> entries from <span class="vari">myArray</span> into <span class="vari">newArray</span>
+          <span class="string">'SLICE'</span> out all the array items from the <span class="string">'THIRD'</span> to the <span class="string">'FIFTH'</span> entries from <span class="vari">myArray</span> into <span class="vari">newArray</span>
         </h2>
       </div>
       <div class="visual-tip">

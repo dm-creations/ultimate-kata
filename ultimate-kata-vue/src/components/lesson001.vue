@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Add <span class="string">'Orange'</span> to the end of the Array
+          Add <span class="string">'Orange'</span> to the end of the Array of <span class="">fruits</span>
         </h2>
       </div>
       <div class="visual-tip">
