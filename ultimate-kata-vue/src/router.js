@@ -12,6 +12,8 @@ import lesson008 from "./views/lesson008.vue"
 import lesson009 from "./views/lesson009.vue"
 import lesson010 from "./views/lesson010.vue"
 import lesson021 from "./views/lesson021.vue"
+import lesson021b from "./views/lesson021b.vue"
+import lesson021c from "./views/lesson021c.vue"
 
 
 Vue.use(VueRouter)
@@ -73,6 +75,16 @@ export default new VueRouter({
             path: "/lesson-21",
             name: "lesson021",
             component: lesson021
+        },
+        {
+            path: "/lesson-21b",
+            name: "lesson021b",
+            component: lesson021b
+        },
+        {
+            path: "/lesson-21c",
+            name: "lesson021c",
+            component: lesson021c
         }
     ]
 })

@@ -9,6 +9,7 @@
         <h2 class="white-txt">
             <span class="string">'SECOND' </span>value with that same value 
         </h2>
+        <h2>Output should look like: [first, sixth, third, fourth, fifth, sixth, seventh]</h2>
       </div>
       <div class="visual-tip">
       </div>

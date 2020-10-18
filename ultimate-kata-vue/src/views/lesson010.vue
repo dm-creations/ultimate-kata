@@ -97,15 +97,20 @@ export default {
   },
   methods: {
     blobber() {
+      // Clear the on screen console
       this.consoleDiv.innerHTML = ''
       console.history = [];
 
+      // Take the code string from the Ace on-page editor and add it to the read-only code displayed before and after
       let lessonString = this.aceEditor.getValue();
       let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
       
+      // explain what this blob stuff does
       let blobberjs = new Blob([fullLessonString], { type: 'text/javascript' });
       let blobberjsLink = URL.createObjectURL(blobberjs);
       let blobberhtml = new Blob(['<script src="',blobberjsLink,'">','</scr','ipt>'], { type: 'text/html' });
+
+      // Select the empty iframe and load the newly created blob url inside it
       let iframe = document.querySelector('.box-iframe');
       iframe.src = URL.createObjectURL(blobberhtml);
       // URL.revokeObjectURL(objectURL) when no longer needed like when going to next lesson

@@ -7,33 +7,38 @@
           Add <span class="string">'Orange'</span> to the end of the Array of <span class="">fruits</span>
         </h2>
       </div>
-      <div class="visual-tip">
-      </div>
-      <div class="attempt">
-        <div class="greyed-out">
-          <!-- to be imported qBoilerplate -->
-          <p><span class="func">let</span> <span class="vari">fruits </span>= [];</p>
-          <p>
-            <span class="vari">fruits </span>= [<span class="string">'Tomato'</span>, <span class="string">'Avocado'</span>, <span class="string">'Lemon'</span>];
-            <span class="comment">// Avocado is a fruit - fight me</span>
-          </p>
-          <br />
-          <p>console.<span class="method">log</span>(<span class="string">'Before = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
+      <div class="workspace">
+        <div class="visual-tip">
+          <aside>Pro-Tip: <br/> Use the force... push</aside><div v-on:click="toggleTip" class="pull-out">></div>
         </div>
-        <!-- end of import qBoilerplate -->
-        <hr /><hr />
+        <div class="workbook">
+          <div class="attempt">
+            <div class="greyed-out">
+              <!-- to be imported qBoilerplate -->
+              <p><span class="func">let</span> <span class="vari">fruits </span>= [];</p>
+              <p>
+                <span class="vari">fruits </span>= [<span class="string">'Tomato'</span>, <span class="string">'Avocado'</span>, <span class="string">'Lemon'</span>];
+                <span class="comment">// Avocado is a fruit - fight me</span>
+              </p>
+              <br />
+              <p>console.<span class="method">log</span>(<span class="string">'Before = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
+            </div>
+            <!-- end of import qBoilerplate -->
+            <hr /><hr />
+          </div>
+          <div class="code-sandbox">
+              <!-- <iframe class="box-iframe" src="https://codesandbox.io/s/lesson001-shvdr?codemirror=1&runonclick=1"></iframe> -->
+            <div id="editor" class="">Code Loading...</div>
+          </div>
+          <hr /><hr />
+          <div class="greyed-out">
+            <p>console.<span class="method">log</span>(<span class="string">'After = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
+          </div>
+          <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
+          <div v-on:click="blobber" class="run test">Run Code</div>
+          <div v-on:click="submit" class="run">Submit Code</div>
+        </div>
       </div>
-      <div class="code-sandbox">
-          <!-- <iframe class="box-iframe" src="https://codesandbox.io/s/lesson001-shvdr?codemirror=1&runonclick=1"></iframe> -->
-        <div id="editor" class="">Code Loading...</div>
-      </div>
-      <hr /><hr />
-      <div class="greyed-out">
-        <p>console.<span class="method">log</span>(<span class="string">'After = ['</span> <span class="operator">+ </span><span class="vari">fruits</span><span class="operator"> + </span><span class="string">']'</span>)</p>
-      </div>
-      <div v-on:click="resetLesson" class="run reset">Reload</div><!-- cute reload gun or resheath animation -->
-      <div v-on:click="blobber" class="run test">Run Code</div>
-      <div v-on:click="submit" class="run">Submit Code</div>
     </div>
     <div class="results-container">
         <div v-if="congratsMessage"> {{ this.congratsMessage }} </div>
@@ -211,6 +216,13 @@ export default {
 
 //  ----------------------------------
 //  ----------------------------------
+    },
+    toggleTip() {
+      var aside = document.querySelector('.visual-tip > aside');
+      var taggle = document.querySelector('.visual-tip > .pull-out');
+
+      aside.style.width > "10px" ? aside.style.width = "0px" : aside.style.width = "200px" 
+      taggle.classList.toggle("pulled-out");
     }
   },
   watch: {
@@ -285,6 +297,41 @@ a {
 .operator, .method {
   color: #d2c057;
 }
+.workspace {
+  display: flex;
+}
+.visual-tip {
+  /* position: absolute; */
+  display: flex;
+  /* vertical-align: top; */
+  height: 60vh;
+  z-index: 9;
+  margin-right: -10px;
+}
+.visual-tip > aside {
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+  transition: width 1s;
+  background-color: lightgrey;
+}
+.visual-tip .pull-out {
+  position: relative;
+  top: 39.5%;
+  height: 25px;
+  background-color: teal;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+.pulled-out {
+  transform: rotateY(180deg);
+}
+.workbook {
+  display: inline-block;
+  width: 100%;
+}
 .code-sandbox {
   width: 100%;
   margin-right: auto;
@@ -354,7 +401,7 @@ textarea {
   background-color: #e63636;
 }
 .results-container {
-  width: 50%;
+  width: 40%;
   position: relative;
   height: 100%;
   display: flex;
@@ -410,7 +457,7 @@ textarea {
     display: flex;
   }
   .code-bg {
-    width: 50%;
+    width: 60%;
   }
   .box-iframe {
     width: 100%;

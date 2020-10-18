@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Create a <span class="tag-name">&lt;nav&gt;</span> element with an id of <span class="string">"header"</span>
+          Create a CHILD <span class="tag-name">&lt;div&gt;</span> element with a class of <span class="string">"nav-content"</span>
         </h2>
       </div>
       <div class="visual-tip">
@@ -56,10 +56,10 @@
 import 'console.history'
 
 export default {
-  name: 'lesson021',
+  name: 'lesson021b',
   data() {
     return {
-      title: 'Lesson 21 - Build a website',
+      title: 'Lesson 21b - Create the Header',
       value: 'We jog',
       language: 'ace/mode/html',
       lessonStartLine: 9,
@@ -73,6 +73,7 @@ export default {
 `,
       postLessonCode: "\n</body>\n</html>",
       themePath: 'ace/theme/monokai',
+      progress: '',
       user: {
         id: 'Free User variable',
         lessonComplete: false,
@@ -90,6 +91,8 @@ export default {
 
     // this.$emit('created', this.lessonCode, this.language);
 
+    // UI should explain in less than one second: Enter Code Here. Red box cascading focus around ace editor text area.
+
     // console.log();
     this.aceEditor = this.$ace.edit('editor', {
         maxLines: 60,
@@ -99,6 +102,20 @@ export default {
         tabSize: 4
         }
       );
+    // load progress from previous lesson into read only section
+    
+    // lesson21State exists? add to variable as String
+    if (localStorage.getItem('lesson21State')) {
+      this.progress = localStorage.getItem('lesson21State');
+
+      let newDiv = document.createElement('div');
+      let preDiv = document.querySelectorAll('div.greyed-out')[0];
+      // turn into html
+      newDiv.innerText = this.progress;
+      preDiv.insertAdjacentElement('beforeend', newDiv)
+     }
+    // insert into div.greyed-out
+    // insert into preLessonCode
     localStorage.getItem('lesson21State') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson21State'))) : this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine, 4);
 
@@ -121,7 +138,7 @@ export default {
   methods: {
     frameloaded() { 
         let iframe = document.querySelector('.box-iframe');
-        let iframeDoc = iframe.contentDocument.getElementById('header');
+        let iframeDoc = iframe.contentDocument.querySelector('.nav-content');
         
         if (typeof(iframeDoc) != 'undefined' && iframeDoc != null){
                 this.congratsMessage = 'Good so far...';
@@ -131,7 +148,7 @@ export default {
     },
     frameSubmit() { 
         let iframe = document.querySelector('.box-iframe');
-        let iframeDoc = iframe.contentDocument.getElementById('header');
+        let iframeDoc = iframe.contentDocument.querySelector('.nav-content');
         
         if (typeof(iframeDoc) != 'undefined' && iframeDoc != null){
                 this.congratsMessage = 'Well done!';
@@ -153,7 +170,7 @@ export default {
     },
     submitter() {
       let lessonString = this.aceEditor.getValue();
-      let fullLessonString = this.preLessonCode + lessonString + this.postLessonCode;
+      let fullLessonString = this.preLessonCode + this.progress + lessonString + this.postLessonCode;
       let blobberhtml = new Blob([fullLessonString], { type: 'text/html' });
       let iframe = document.querySelector('.box-iframe');
       iframe.src = URL.createObjectURL(blobberhtml);
@@ -186,14 +203,14 @@ export default {
     // iframe.removeEventListener('load', this.frameloaded );
     },
     nexx() {
-        this.$router.push('/lesson-21b');
+        this.$router.push('/lesson-21c');
     },
     NextLesson() {
       console.log('go to next Lesson');
     },
     saveLesson() {
       let lessonString = this.aceEditor.getValue();
-      localStorage.setItem('lesson21State', lessonString)
+      localStorage.setItem('lesson21bState', lessonString)
     },
     submit() {
       // clear console Div
