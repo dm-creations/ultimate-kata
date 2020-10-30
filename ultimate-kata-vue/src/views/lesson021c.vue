@@ -139,14 +139,33 @@ export default {
   methods: {
     frameloaded() { 
         let iframe = document.querySelector('.box-iframe');
+    
+        let testEl1 = iframe.contentDocument.querySelector('.logo');
+        let testEl2 = iframe.contentDocument.querySelector('.menu');
+        
         let elcheck1 = (el) => {
+          //check is an element?
           return (typeof(el) != 'undefined' && el != null) ? true : false;
         }
-        // let elcheck2 = iframe.contentDocument.querySelector('menu') 
-        let testEl1 = iframe.contentDocument.querySelector('.logo');
-        
-        if (elcheck1(testEl1)) {
-          this.congratsMessage = 'Good so far...'
+
+        let elcheck2 = (el1,el2) => {
+          // default values
+          el1 = (typeof(el1) != 'undefined' && el1 != null) ? true : false;
+          el2 = (typeof(el2) != 'undefined' && el2 != null) ? true : false;
+          
+          console.log(el1 + " " + el2)
+
+          // Is a child of #nav ?
+          let second = ( iframe.contentDocument.querySelector('.nav-content').children[0] == ( el1 || el2 )) ? true : false;
+
+          console.log(second);
+          
+          return (second == true) ? true : false;
+        }
+        if (elcheck1(testEl1) && elcheck1(testEl2) && (elcheck2(testEl1,testEl2) == false)) {
+          this.congratsMessage = 'Good so far... but are the divs INSIDE the #nav?'
+        } if (elcheck1(testEl1) && elcheck2(testEl2) && (elcheck2(testEl1, testEl2) == true)) {
+          this.congratsMessage = "Good Job - Looks good!"
         } else {
           this.congratsMessage = 'Not Quite'
         }
