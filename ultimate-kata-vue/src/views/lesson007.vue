@@ -4,7 +4,7 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Merge the <span class="string">'TWO ARRAYS'</span> into <span class="string">'ONE </span>array
+          Merge or <span class="string">'concatenate'</span> the <span class="string">'TWO ARRAYS'</span> into <span class="string">'ONE </span>array
         </h2>
         <h2 class="white-txt">
             Call the array <span class="string">'bothParts'</span>
