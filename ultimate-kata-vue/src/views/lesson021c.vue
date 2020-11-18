@@ -4,7 +4,10 @@
       <div class="prompt">
         <h1 class="white-txt">{{ title }}</h1>
         <h2 class="white-txt">
-          Create two <span class="tag-name">&lt;div&gt;</span> elements with the class names: <span class="string">"{{testClasses[1]}}"</span> and <span class="string">"{{testClasses[2].substring(1)}}"</span>
+          Create two <span class="tag-name">&lt;div&gt;</span> elements with the class names: <span class="string">"{{testClasses[1].substring(1)}}"</span> and <span class="string">"{{testClasses[2].substring(1)}}"</span>
+        </h2>
+        <h2 class="white-txt">
+          (In that order: logo, menu)
         </h2>
       </div>
       <div class="visual-tip">
@@ -36,8 +39,10 @@
       <div v-on:click="submit" class="run">Submit Code</div>
     </div>
     <div class="results-container">
-        <div v-if="congratsMessage"> {{ this.congratsMessage }} </div>
-      <iframe id="ifrm" class="box-iframe"></iframe>
+        <div class="test-results" v-if="congratsMessage"> {{ this.congratsMessage }} </div>
+        <div class="successes" v-for="success in messages.success" :key="success"> {{ success }} </div>
+        <div class="fails" v-for="fail in messages.fail" :key="fail"> {{ fail }} </div>
+      <iframe id="ifrm" class="box-iframe"></iframe> 
       <div id="console-log-div" class="console-log-div"></div>
     </div>
     <div class="modal">
@@ -66,6 +71,7 @@ export default {
       lessonSession: '',
       iframeLoaded: false,
       congratsMessage: null,
+      messages: {success:[],fail:''},
       preLessonCode: `<!DOCTYPE html>\n<html lang="en">\n<head>\n<title>A quick website</title>\n</head>\n<body>`,
       lessonCode: `<!--                 | |  -->
 <!--                 | |  -->
@@ -81,9 +87,9 @@ export default {
       },
       nextLessontimer: 3000,
       testClasses: {
-        1 : 'logo',
+        1 : '.logo',
         2 : '.menu'
-        }
+      }
     }
   },
   beforeMount() {
@@ -145,90 +151,104 @@ export default {
         let iframe = document.querySelector('.box-iframe');
     
         let testEl1 = (cssClass) => iframe.contentDocument.querySelector(cssClass);
-        // let testEl2 = iframe.contentDocument.querySelector('.menu');
-        
-        // this.elcheckX = (el) => {
-        //   //check is an element?
-        //   if (typeof(el) != 'undefined' && el != null) {
-        //     messages.push({'success': '.' + el.className + ' element exists'})
-        //     return true 
-        //   } else {
-        //     console.log(el + " <--- this");
-        //     // console.log();
-        //     messages.push({"fail": "element not created yet"});
-        //     return false;
-        //   }
-        // }
         
         // For the checks, create an array of messages to output after different test cases are run
         // Maybe each item should be an object with success or fail as a type
-
         let messages = {success: [],fail: []};
+        let check1 = [];
+        let check2 = iframe.contentDocument.querySelector('.nav-content').children.length > 0;
 
-        let elcheck1 = (el,txt) => {
+        let elcheck1 = (el,txt = 'class') => {
           // testEl1('.logo') or testEl1(this.testClasses[1],this.testClasses[1] or '.logo')
           //check is an element?
           if (typeof(el) != 'undefined' && el != null) {
             // check element has the lesson's className
-            messages.success.push('.' + el.className + ' element exists')
-            return true 
+            messages.success.push(el.className + ' element exists')
+            check1.push(true) 
           } else {
             // if check-is-an element fails, which element were we testing for? Check this.testClasses object
             messages.fail.push(txt + " element not created yet");
-            return false;
+            check1.push(false);
           }
         }
 
-        let elcheck2 = (el1,el2) => {
-          // default values
-          el1 = (typeof(el1) != 'undefined' && el1 != null) ? true : false;
-          el2 = (typeof(el2) != 'undefined' && el2 != null) ? true : false;
+        // let elcheck2 = (el1,el2) => {
+        //   // checks if they are valid elements
+        //   el1 = (typeof(el1) != 'undefined' && el1 != null) ? true : false;
+        //   el2 = (typeof(el2) != 'undefined' && el2 != null) ? true : false;
           
-          console.log("elcheck2 ---> " + el1 + " " + el2)
-        }
-
-        // let elcheck3 = (el1,el2) => {
-        //   // Are elements in the right order?
-        //   // Is testClass 1 before testClass 2?
-
-        //   // Is first element the first child of #nav ?
-        //   let first = iframe.contentDocument.querySelector('.nav-content').children[0] === ( el1 ) ? true : false ;
-        //   // Is second element the second child of #nav ?
-        //   let second = iframe.contentDocument.querySelector('.nav-content').children[1] === ( el2 ) ? true : false ;
-
-        //   if (first === false) console.log("first element is " + first);
-        //   if (second === false) console.log(second);
-        
-        //   return (second == true) ? true : false;
+        //   console.log("elcheck2 ---> " + el1 + " " + el2)
+        //   check2 = ((el1 && el2 == true) ? true : false)
+        //   console.log('check 2 = ' + check2)
         // }
 
-          // if (elcheck1(testEl1(this.testClasses[1]),this.testClasses[1]) && elcheck1(testEl1(this.testClasses[2]),this.testClasses[2]) && (elcheck2(testEl1,testEl2) == false)) {
-          //   this.congratsMessage = 'Good so far... but are the divs INSIDE the #nav?'
-          // }
-          elcheck1(testEl1('.' + this.testClasses[1]),this.testClasses[1]); 
-          elcheck1(testEl1(this.testClasses[2]),this.testClasses[2]);
-          elcheck2(testEl1('.' + this.testClasses[1],this.testClasses[2]));
-          // elcheck3(testEl1,testEl2);
+        let elcheck3 = (el1,el2) => {
+          // Are elements in the right order?
+          // Is testClass 1 before testClass 2?
+
+          // function what number am I? what number is other element? parent.children array check == ? return my number
+          // function compare number of next element
+          if ( (check1[0] && check1[1]) == false ) { 
+            console.log('the checks:')
+            console.log(check1[0])
+            console.log(check1[1])
+            console.log(check2)
+
+            
+            return }
+          let elArray = Array.from(iframe.contentDocument.querySelector('.nav-content').children);
+          let firstIndex = el1;
+          let secondIndex = el2;
+          
+          console.log(elArray);
+          console.log(el2);
+
+          function whatIndex(input) {
+            for (var i=0; i < elArray.length; i++){
+              if (elArray[i] == input){
+                input = i;
+                console.log(input + ' Index = ' + i)
+                return input;
+              }
+            }
+          }
+
+          firstIndex = whatIndex(el1);
+          secondIndex = whatIndex(el2);
+          
+          console.log('first Index ==' + firstIndex)
+          console.log('second Index ==' + secondIndex)
+
+          if (firstIndex < secondIndex){
+            messages.success.push('.logo and .menu elements are in the right order')
+          } else {
+            messages.fail.push('.logo and .menu elements seem to be in the wrong order or wrong place or have the wrong parent')
+          }
+        }
+
+        elcheck1(testEl1(this.testClasses[1]),this.testClasses[1]);
+        elcheck1(testEl1(this.testClasses[2]),this.testClasses[2]);
+        // elcheck2(testEl1(this.testClasses[1]),testEl1(this.testClasses[2]) );
+        elcheck3(testEl1(this.testClasses[1]),testEl1(this.testClasses[2]));
 
           // Extra checks to run:
           // did you spell logo right? If elements exist do a regex on the 
           // did you spell menu right?
-          console.log(messages)
+          // are there the right amounts of each elements?
+        console.log(messages)
+        this.messages = {};
         
-        // if (elcheck1(testEl1) && elcheck2(testEl2) && (elcheck2(testEl1, testEl2) == true)) {
-        //   this.congratsMessage = "Good Job - Looks good!"
-        // } else {
-        //   this.congratsMessage = 'Not Quite'
-        // }
+         if (messages.success.length == 3 && messages.fail.length == 0) {
+          // this.congratsMessage = "Good Job - Looks good!"
+            this.messages = messages;
+            this.congratsMessage = 'Well done! Submit it!'
+        } if (messages.success.length < 3 && messages.fail.length >= 0) {
+            this.messages = messages;
+            this.congratsMessage = 'Getting there...'
+        } if (messages.success.length == 0 & messages.fail.length > 1) {
+            this.congratsMessage = 'Not quite'
+        }
 
-        // if (typeof(elcheck1) != 'undefined' && elcheck1 != null){
-        //   if (iframe.contentDocument.querySelector('#header').children[0] == iframe.contentDocument.querySelector('.nav-content')){
-        //       this.congratsMessage = 'Good so far...'
-        //   } else {
-        //     this.congratsMessage = 'Is the <div> inside the <nav>?'; }
-        //   } else {
-        //       this.congratsMessage = 'mehh';
-        //   }
     },
     frameSubmit() { 
         let iframe = document.querySelector('.box-iframe');
@@ -390,7 +410,7 @@ a {
 .prompt {
   box-sizing: border-box;
   padding: 10px 0;
-  height: 120px;
+  height: auto;
   border-bottom: solid 1px white;
 }
 .white-txt {
@@ -497,6 +517,12 @@ textarea {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+.successes {
+  color: green;
+}
+.fails {
+  color: orange;
 }
 .console-log-div {
   box-sizing: border-box;
