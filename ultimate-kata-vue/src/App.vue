@@ -51,6 +51,18 @@ export default {
 #app .lesson {
   border: 0;
 }
+h1, .h1 {
+  font-size: 50px;
+}
+h2, .h2 {
+  font-size: 40px;
+}
+h3, .h3 {
+  font-size: 30px;
+}
+h4, .h4 {
+  font-size: 20px;
+}
 p {
   margin: 2px 0;
 }

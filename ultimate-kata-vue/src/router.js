@@ -1,6 +1,7 @@
 // router.js 
 import Vue from "vue"
 import VueRouter from "vue-router"
+import welcome from "./components/welcome.vue"
 import lesson001 from "./components/lesson001.vue"
 import lesson002 from "./views/lesson002.vue"
 import lesson003 from "./views/lesson003.vue"
@@ -14,6 +15,7 @@ import lesson010 from "./views/lesson010.vue"
 import lesson021 from "./views/lesson021.vue"
 import lesson021b from "./views/lesson021b.vue"
 import lesson021c from "./views/lesson021c.vue"
+import lesson021d from "./views/lesson021d.vue"
 
 
 Vue.use(VueRouter)
@@ -23,6 +25,11 @@ export default new VueRouter({
     routes: [
         {
             path: "/",
+            name: "welcome",
+            component: welcome
+        },
+        {
+            path: "/lesson001",
             name: "lesson001",
             component: lesson001
         },
@@ -85,6 +92,11 @@ export default new VueRouter({
             path: "/lesson-21c",
             name: "lesson021c",
             component: lesson021c
+        },
+        {
+            path: "/lesson-21d",
+            name: "lesson021d",
+            component: lesson021d
         }
     ]
 })

@@ -61,10 +61,10 @@
 import 'console.history'
 
 export default {
-  name: 'lesson021c',
+  name: 'lesson021d',
   data() {
     return {
-      title: 'Lesson 21c - Create the Header',
+      title: 'Lesson 21d - Populate the Header',
       value: 'We jog',
       language: 'ace/mode/html',
       lessonStartLine: 9,
@@ -115,8 +115,8 @@ export default {
     // load progress from previous lesson into read only section
     
     // lesson21State exists? add to variable as String
-    if (localStorage.getItem('lesson21bState')) {
-      this.progress = localStorage.getItem('lesson21bState');
+    if (localStorage.getItem('lesson21cState')) {
+      this.progress = localStorage.getItem('lesson21cState');
 
       let newDiv = document.createElement('div');
       let preDiv = document.querySelectorAll('div.greyed-out')[0];
@@ -127,7 +127,7 @@ export default {
     // insert into div.greyed-out
     // insert into preLessonCode
     // Lesson 21b code exists? use it, else: get this.lessonCode
-    localStorage.getItem('lesson21bState') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson21bState'))) : this.aceEditor.session.setValue(this.lessonCode);
+    localStorage.getItem('lesson21cState') ? (this.aceEditor.session.setValue(localStorage.getItem('lesson21cState'))) : this.aceEditor.session.setValue(this.lessonCode);
     this.aceEditor.gotoLine(this.lessonStartLine, 4);
 
     this.consoleDiv = document.querySelector('.console-log-div');
